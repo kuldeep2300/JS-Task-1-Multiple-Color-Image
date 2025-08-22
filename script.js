@@ -74,53 +74,6 @@ let thumbnailImages = createElem("div", {
 leftContainer.append(featureImage, thumbnailImages);
 //*-------------- Left container End ---------------------//
 
-//? Render Thumbnails functions
-const renderThumbnails = (filter = "all") => {
-  thumbnailImages.innerHTML = "";
-
-  const filtered =
-    filter === "all"
-      ? allColorsArray
-      : allColorsArray.filter((colorArray) => colorArray.colorName === filter);
-
-  filtered.forEach((item) => {
-    let thumb = createElem(
-      "div",
-      {
-        width: "100px",
-        height: "100px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "15px",
-        backgroundColor: item.bgColor,
-        fontWeight: "bold",
-        cursor: "pointer",
-      },
-      item.label
-    );
-
-    thumbnailImages.append(thumb);
-  });
-};
-
-renderThumbnails("all");
-
-//? Set Feature function - Set text and color property
-const setFeature = (item) => {
-  featureImage.textContent = item.label;
-  featureImage.style.backgroundColor = item.bgColor;
-
-  featureImage.style.display = "flex";
-  featureImage.style.alignItems = "center";
-  featureImage.style.justifyContent = "center";
-  featureImage.style.fontSize = "20px";
-  featureImage.style.fontWeight = "bold";
-  featureImage.style.color = "#000";
-};
-
-setFeature(allColorsArray[0]);
-
 //*-------------- Right container Start ---------------------//
 let rightContainer = createElem("div");
 
@@ -174,3 +127,64 @@ rightContainer.append(btnContainer, select);
 
 //? adding both container to body
 body.append(leftContainer, rightContainer);
+
+//? Render Thumbnails functions
+function renderThumbnails (filter = "all") {
+  thumbnailImages.innerHTML = "";
+
+  const filtered =
+    filter === "all"
+      ? allColorsArray
+      : allColorsArray.filter((colorArray) => colorArray.colorName === filter);
+
+  filtered.forEach((item) => {
+    let thumb = createElem(
+      "div",
+      {
+        width: "100px",
+        height: "100px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "15px",
+        backgroundColor: item.bgColor,
+        border: state.selected === item ? "3px solid black" : "none",
+        fontWeight: "bold",
+        cursor: "pointer",
+      },
+      item.label
+    );
+
+    // storing data reference on data itself
+    thumb.dataset.colorName = item.colorName;
+    thumb.dataset.label = item.label;
+    thumb.dataset.bgColor = item.bgColor;
+
+    thumb.addEventListener('click', () => {
+        state.selected = item;
+        setFeature(item);
+        renderThumbnails(filter)
+    })
+
+    thumbnailImages.append(thumb);
+  });
+};
+
+//? Set Feature function - Set text and color property
+function setFeature (item) {
+  featureImage.textContent = item.label;
+  featureImage.style.backgroundColor = item.bgColor;
+
+  featureImage.style.display = "flex";
+  featureImage.style.alignItems = "center";
+  featureImage.style.justifyContent = "center";
+  featureImage.style.fontSize = "20px";
+  featureImage.style.fontWeight = "bold";
+  featureImage.style.color = "#000";
+};
+
+//? Default values
+state.selected = allColorsArray[0];
+setFeature(state.selected);
+renderThumbnails("all");
+
