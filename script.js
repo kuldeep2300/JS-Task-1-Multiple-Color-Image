@@ -5,6 +5,8 @@ body.style.display = "grid";
 body.style.gridTemplateColumns = "1fr 1fr";
 body.style.gap = "1rem";
 
+
+
 //? 1) Helper function - create an element, apply styles and optional text
 const createElem = (tag, styles = {}, text = "") => {
   const elem = document.createElement(tag);
@@ -19,7 +21,7 @@ const state = {
   selected: null,
 };
 
-//* Color data arrays
+//? Color data arrays
 
 const blueColors = [
   { colorName: "blue", label: "1/5 - BLUE", bgColor: "#3fb0cc" },
@@ -44,10 +46,10 @@ const greenColors = [
 
 // All colors merge array
 const allColorsArray = [...blueColors, ...redColors, ...greenColors];
+console.log(allColorsArray);
 
 
 //*-------------- Left container Start ---------------------//
-
 let leftContainer = createElem("div", {
   display: "flex",
   flexDirection: "column",
@@ -71,10 +73,8 @@ let thumbnailImages = createElem("div", {
   gridTemplateColumns: "repeat(4, 1fr)",
 });
 
-
 //? add to left container
 leftContainer.append(featureImage, thumbnailImages);
-
 //*-------------- Left container End ---------------------//
 
 //*-------------- Right container Start ---------------------//
@@ -126,3 +126,33 @@ rightContainer.append(btnContainer, select);
 
 // adding both container to body
 body.append(leftContainer, rightContainer);
+
+
+//? Render Thumbnails functions
+const renderThumbnails = (filter = "all") => {
+  thumbnailImages.innerHTML = "";
+
+  const filtered =
+    filter === "all"
+      ? allColorsArray
+      : allColorsArray.filter((colorArray) => colorArray.colorName === filter);
+
+  filtered.forEach((item) => {
+    let thumb = createElem("div", {
+      width: "100px",
+      height: "100px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      fontSize: "15px",
+      backgroundColor: item.bgColor,
+      fontWeight: 'bold',
+      cursor: 'pointer',
+    }, item.label);
+
+    thumbnailImages.append(thumb);
+  });
+};
+
+renderThumbnails('all');
+
