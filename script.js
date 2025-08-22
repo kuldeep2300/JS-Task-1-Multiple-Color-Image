@@ -5,90 +5,108 @@ body.style.display = "grid";
 body.style.gridTemplateColumns = "1fr 1fr";
 body.style.gap = "1rem";
 
+//? 1) Helper function - create an element, apply styles and optional text
+const createElem = (tag, styles = {}, text = "") => {
+  const elem = document.createElement(tag);
+  Object.assign(elem.style, styles);
+  if (text) elem.textContent = text;
+  return elem;
+};
+
+//? 2) State managing - for filter and thumbnail selected
+const state = {
+  filter: "all",
+  selected: null,
+};
+
 //* Colors arrays
-const blue = [
-    {}
-];
 
+const blue = [{}];
 
-//*  Left container
-let leftContainer = document.createElement("div");
-leftContainer.style.cssText =
-  "display: flex; flex-direction: column; gap: 1rem; padding: 10px;";
+//*-------------- Left container Start ---------------------//
+let leftContainer = createElem("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  padding: "10px",
+});
 
 // Feature Image - Container
-let color = "gray";
-let featureImage = document.createElement("div");
-featureImage.style.cssText = `width: 500px; height: 350px; background-color: ${color};`;
+let featureImage = createElem("div", {
+  width: "500px",
+  height: "300px",
+  backgroundColor: "gray",
+});
 
 // Thumbnails - Container
-let thumbnailImages = document.createElement("div");
-thumbnailImages.style.cssText = `width: 500px; height: 450px;  padding: 10px; display: grid; grid-template-columns: repeat(4, 1fr);`;
+let thumbnailImages = createElem("div", {
+  width: "500px",
+  height: "450px",
+  padding: "10px",
+  display: "grid",
+  gridTemplateColumns: "repeat(4, 1fr)",
+});
 
-let list = 12;
-for (let i = 1; i <= list; i++) {
-  let colorElement = document.createElement("div");
-  colorElement.style.cssText =
-    "width: 100px; height: 100px; background-color: red;";
+// let list = 12;
+// for (let i = 1; i <= list; i++) {
+//   let colorElement = document.createElement("div");
+//   colorElement.style.cssText =
+//     "width: 100px; height: 100px; background-color: red;";
 
-  thumbnailImages.append(colorElement);
-}
+//   thumbnailImages.append(colorElement);
+// }
 
-//? Appending left Container parts
+//? add to left container
 leftContainer.append(featureImage, thumbnailImages);
 
-//* Right Container
-let rightContainer = document.createElement("div");
+//*-------------- Left container End ---------------------//
 
-// Btn Container
-let btnContainer = document.createElement("div");
-let allBtn = document.createElement("button");
-let redBtn = document.createElement("button");
-let greenBtn = document.createElement("button");
-let blueBtn = document.createElement("button");
+//*-------------- Right container Start ---------------------//
+let rightContainer = createElem("div");
 
-btnContainer.style.cssText = "display: flex; gap: 1rem; margin-top: 50px;";
-allBtn.textContent = "ALL";
-allBtn.style.cssText = "font-size: 20px; padding: 5px 10px; cursor: pointer";
+// Buttons Container
+let btnContainer = createElem("div", {
+  display: "flex",
+  gap: "1rem",
+  marginTop: "50px",
+});
 
-redBtn.textContent = "RED";
-redBtn.style.cssText = "font-size: 20px; padding: 5px 10px; cursor: pointer";
+let buttonStyles = {
+  fontSize: "20px",
+  padding: "5px 10px",
+  cursor: "pointer",
+};
 
-greenBtn.textContent = "GREEN";
-greenBtn.style.cssText = "font-size: 20px; padding: 5px 10px; cursor: pointer";
-
-blueBtn.textContent = "BLUE";
-blueBtn.style.cssText = "font-size: 20px; padding: 5px 10px; cursor: pointer";
+let allBtn = createElem("button", buttonStyles, "ALL");
+let redBtn = createElem("button", buttonStyles, "RED");
+let greenBtn = createElem("button", buttonStyles, "GREEN");
+let blueBtn = createElem("button", buttonStyles, "BLUE");
 
 btnContainer.append(allBtn, redBtn, greenBtn, blueBtn);
 
 // Dropdown menu - Container
-let select = document.createElement("select");
-let allOption = document.createElement("option");
-let redOption = document.createElement("option");
-let greenOption = document.createElement("option");
-let blueOption = document.createElement("option");
+let select = createElem("select", {
+  padding: "10px 15px 10px 5px",
+  marginTop: "100px",
+  fontSize: "20px",
+});
 
-allOption.style.value = "all";
-allOption.textContent = "ALL";
-// allOption.style.cssText = ''
+let allOption = createElem("option", {}, "ALL");
+allOption.value = "all";
+let redOption = createElem("option", {}, "RED");
+redOption.value = "red";
+let greenOption = createElem("option", {}, "GREEN");
+greenOption.value = "green";
+let blueOption = createElem("option", {}, "BLUE");
+blueOption.value = "blue";
 
-redOption.style.value = "red";
-redOption.textContent = "RED";
-
-greenOption.style.value = "green";
-greenOption.textContent = "GREEN";
-
-blueOption.style.value = "blue";
-blueOption.textContent = "BLUE";
-
-select.style.cssText = 'padding: 10px 15px 10px 5px; margin-top: 100px; font-size: 20px;'
-
-// append all options in select
+// append options 
 select.append(allOption, redOption, greenOption, blueOption);
 
-//? Appending right container parts
+//? add to right container
 rightContainer.append(btnContainer, select);
 
-// Appending both container to body
+//*--------------Right container End---------------------//
+
+// adding both container to body
 body.append(leftContainer, rightContainer);
