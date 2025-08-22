@@ -64,9 +64,10 @@ let featureImage = createElem("div", {
 // Thumbnails - Container
 let thumbnailImages = createElem("div", {
   width: "500px",
-  height: "450px",
+  height: "auto",
   padding: "10px",
   display: "grid",
+  gap: "1rem",
   gridTemplateColumns: "repeat(4, 1fr)",
 });
 
@@ -96,10 +97,10 @@ let greenBtn = createElem("button", buttonStyles, "GREEN");
 let blueBtn = createElem("button", buttonStyles, "BLUE");
 
 btnContainer.append(allBtn, redBtn, greenBtn, blueBtn);
-allBtn.addEventListener("click", () => renderThumbnails("all"));
-redBtn.addEventListener("click", () => renderThumbnails("red"));
-greenBtn.addEventListener("click", () => renderThumbnails("green"));
-blueBtn.addEventListener("click", () => renderThumbnails("blue"));
+allBtn.addEventListener("click", () => setFilter("all"));
+redBtn.addEventListener("click", () => setFilter("red"));
+greenBtn.addEventListener("click", () => setFilter("green"));
+blueBtn.addEventListener("click", () => setFilter("blue"));
 
 // Dropdown menu - Container
 let select = createElem("select", {
@@ -129,7 +130,7 @@ rightContainer.append(btnContainer, select);
 body.append(leftContainer, rightContainer);
 
 //? Render Thumbnails functions
-function renderThumbnails (filter = "all") {
+function renderThumbnails(filter = "all") {
   thumbnailImages.innerHTML = "";
 
   const filtered =
@@ -160,18 +161,18 @@ function renderThumbnails (filter = "all") {
     thumb.dataset.label = item.label;
     thumb.dataset.bgColor = item.bgColor;
 
-    thumb.addEventListener('click', () => {
-        state.selected = item;
-        setFeature(item);
-        renderThumbnails(filter)
-    })
+    thumb.addEventListener("click", () => {
+      state.selected = item;
+      setFeature(item);
+      renderThumbnails(filter);
+    });
 
     thumbnailImages.append(thumb);
   });
-};
+}
 
 //? Set Feature function - Set text and color property
-function setFeature (item) {
+function setFeature(item) {
   featureImage.textContent = item.label;
   featureImage.style.backgroundColor = item.bgColor;
 
@@ -181,10 +182,32 @@ function setFeature (item) {
   featureImage.style.fontSize = "20px";
   featureImage.style.fontWeight = "bold";
   featureImage.style.color = "#000";
-};
+}
+
+function setFilter(filter) {
+  state.filter = filter;
+
+  // Filtered like in renderThumbnail
+  const filtered =
+    filter === "all"
+      ? allColorsArray
+      : allColorsArray.filter((colorArr) => colorArr.colorName === filter);
+
+  // Dynamically storing filter first object in state selected so that we default it will be having border
+  state.selected = filtered[0];
+
+  setFeature(state.selected);
+  renderThumbnails(filter);
+
+  // To find out the difference between which filter is applied or not
+  [allBtn, redBtn, greenBtn, blueBtn].forEach((btn) => {
+    btn.style.backgroundColor =
+      btn.textContent.toLowerCase() === filter ? "#333" : "";
+    btn.style.color =
+      btn.textContent.toLowerCase() === filter ? "white" : "black";
+  });
+}
 
 //? Default values
-state.selected = allColorsArray[0];
-setFeature(state.selected);
+setFilter("all");
 renderThumbnails("all");
-
