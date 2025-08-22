@@ -5,8 +5,6 @@ body.style.display = "grid";
 body.style.gridTemplateColumns = "1fr 1fr";
 body.style.gap = "1rem";
 
-
-
 //? 1) Helper function - create an element, apply styles and optional text
 const createElem = (tag, styles = {}, text = "") => {
   const elem = document.createElement(tag);
@@ -48,7 +46,6 @@ const greenColors = [
 const allColorsArray = [...blueColors, ...redColors, ...greenColors];
 console.log(allColorsArray);
 
-
 //*-------------- Left container Start ---------------------//
 let leftContainer = createElem("div", {
   display: "flex",
@@ -77,6 +74,53 @@ let thumbnailImages = createElem("div", {
 leftContainer.append(featureImage, thumbnailImages);
 //*-------------- Left container End ---------------------//
 
+//? Render Thumbnails functions
+const renderThumbnails = (filter = "all") => {
+  thumbnailImages.innerHTML = "";
+
+  const filtered =
+    filter === "all"
+      ? allColorsArray
+      : allColorsArray.filter((colorArray) => colorArray.colorName === filter);
+
+  filtered.forEach((item) => {
+    let thumb = createElem(
+      "div",
+      {
+        width: "100px",
+        height: "100px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "15px",
+        backgroundColor: item.bgColor,
+        fontWeight: "bold",
+        cursor: "pointer",
+      },
+      item.label
+    );
+
+    thumbnailImages.append(thumb);
+  });
+};
+
+renderThumbnails("all");
+
+//? Set Feature function - Set text and color property
+const setFeature = (item) => {
+  featureImage.textContent = item.label;
+  featureImage.style.backgroundColor = item.bgColor;
+
+  featureImage.style.display = "flex";
+  featureImage.style.alignItems = "center";
+  featureImage.style.justifyContent = "center";
+  featureImage.style.fontSize = "20px";
+  featureImage.style.fontWeight = "bold";
+  featureImage.style.color = "#000";
+};
+
+setFeature(allColorsArray[0]);
+
 //*-------------- Right container Start ---------------------//
 let rightContainer = createElem("div");
 
@@ -99,6 +143,10 @@ let greenBtn = createElem("button", buttonStyles, "GREEN");
 let blueBtn = createElem("button", buttonStyles, "BLUE");
 
 btnContainer.append(allBtn, redBtn, greenBtn, blueBtn);
+allBtn.addEventListener("click", () => renderThumbnails("all"));
+redBtn.addEventListener("click", () => renderThumbnails("red"));
+greenBtn.addEventListener("click", () => renderThumbnails("green"));
+blueBtn.addEventListener("click", () => renderThumbnails("blue"));
 
 // Dropdown menu - Container
 let select = createElem("select", {
@@ -124,35 +172,5 @@ rightContainer.append(btnContainer, select);
 
 //*--------------Right container End---------------------//
 
-// adding both container to body
+//? adding both container to body
 body.append(leftContainer, rightContainer);
-
-
-//? Render Thumbnails functions
-const renderThumbnails = (filter = "all") => {
-  thumbnailImages.innerHTML = "";
-
-  const filtered =
-    filter === "all"
-      ? allColorsArray
-      : allColorsArray.filter((colorArray) => colorArray.colorName === filter);
-
-  filtered.forEach((item) => {
-    let thumb = createElem("div", {
-      width: "100px",
-      height: "100px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      fontSize: "15px",
-      backgroundColor: item.bgColor,
-      fontWeight: 'bold',
-      cursor: 'pointer',
-    }, item.label);
-
-    thumbnailImages.append(thumb);
-  });
-};
-
-renderThumbnails('all');
-
