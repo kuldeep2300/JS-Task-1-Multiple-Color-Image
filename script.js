@@ -121,6 +121,11 @@ blueOption.value = "blue";
 // append options
 select.append(allOption, redOption, greenOption, blueOption);
 
+// Adding event listener & on select & sync the filter of button and drowdown item value
+select.addEventListener("change", (e) => {
+  setFilter(e.target.value);
+});
+
 //? add to right container
 rightContainer.append(btnContainer, select);
 
@@ -206,6 +211,8 @@ function setFilter(filter) {
     btn.style.color =
       btn.textContent.toLowerCase() === filter ? "white" : "black";
   });
+
+  select.value = filter;
 }
 
 //? Default values
