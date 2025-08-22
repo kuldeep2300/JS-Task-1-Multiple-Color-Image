@@ -19,11 +19,35 @@ const state = {
   selected: null,
 };
 
-//* Colors arrays
+//* Color data arrays
 
-const blue = [{}];
+const blueColors = [
+  { colorName: "blue", label: "1/5 - BLUE", bgColor: "#3fb0cc" },
+  { colorName: "blue", label: "2/5 - BLUE", bgColor: "#3f96cb" },
+  { colorName: "blue", label: "3/5 - BLUE", bgColor: "#3e70cb" },
+  { colorName: "blue", label: "4/5 - BLUE", bgColor: "#1928fe" },
+  { colorName: "blue", label: "5/5 - BLUE", bgColor: "#00a8f2" },
+];
+
+const redColors = [
+  { colorName: "red", label: "1/3 - RED", bgColor: "#eb1c24" },
+  { colorName: "red", label: "2/3 - RED", bgColor: "#88001b" },
+  { colorName: "red", label: "3/3 - RED", bgColor: "#fe3a60" },
+];
+
+const greenColors = [
+  { colorName: "green", label: "1/4 - GREEN", bgColor: "#e0fe00" },
+  { colorName: "green", label: "2/4 - GREEN", bgColor: "#ccfe00" },
+  { colorName: "green", label: "3/4 - GREEN", bgColor: "#6efe00" },
+  { colorName: "green", label: "4/4 - GREEN", bgColor: "#00c438" },
+];
+
+// All colors merge array
+const allColorsArray = [...blueColors, ...redColors, ...greenColors];
+
 
 //*-------------- Left container Start ---------------------//
+
 let leftContainer = createElem("div", {
   display: "flex",
   flexDirection: "column",
@@ -47,14 +71,6 @@ let thumbnailImages = createElem("div", {
   gridTemplateColumns: "repeat(4, 1fr)",
 });
 
-// let list = 12;
-// for (let i = 1; i <= list; i++) {
-//   let colorElement = document.createElement("div");
-//   colorElement.style.cssText =
-//     "width: 100px; height: 100px; background-color: red;";
-
-//   thumbnailImages.append(colorElement);
-// }
 
 //? add to left container
 leftContainer.append(featureImage, thumbnailImages);
@@ -100,7 +116,7 @@ greenOption.value = "green";
 let blueOption = createElem("option", {}, "BLUE");
 blueOption.value = "blue";
 
-// append options 
+// append options
 select.append(allOption, redOption, greenOption, blueOption);
 
 //? add to right container
